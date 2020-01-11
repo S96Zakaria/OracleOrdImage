@@ -1,15 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css"  th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" href="../static/css/mdb.min.css" th:href="@{/css/mdb.min.css}" />
+    <link rel="stylesheet" type="text/css" href="../static/css/style.min.css" th:href="@{/css/style.css}" />
 </head>
 <body>
-<form  action="/images/"  method="post" enctype="multipart/form-data">
 
-    <input type="file" name="file" >
-    <input type="submit" name="name"/>
-</form>
+<div class="container">
+    <div class="row">
+        <form >
+            <input type="file" name="file" >
+            <input type="submit" name="name"/>
+        </form>
+        <form class="md-form" action="/images/"  method="post" enctype="multipart/form-data">
+            <div class="file-field">
+                <div class="btn btn-primary btn-sm float-left">
+                    <span>Parcourir Image...</span>
+                    <input type="file"  name="file" >
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" placeholder="Upload your file" disabled>
+                </div>
+            </div>
+                 <button type="submit" class="btn purple-gradient">Purple</button>
+        </form>
+
+        <form class="md-form">
+            <div class="file-field">
+                <a class="btn-floating peach-gradient mt-0 float-left">
+                    <i class="fas fa-paperclip" aria-hidden="true"></i>
+                    <input type="file">
+                </a>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" placeholder="Upload your file">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="../static/js/bootstrap.js" th:href="@{/js/bootstrap.js}"></script>
+<script src="../static/js/jquery.js" th:href="@{/js/jquery.js}"></script>
+<script src="../static/js/popper.js" th:href="@{/js/popper.js}"></script>
+<script src="../static/js/mdb.js" th:href="@{/js/mdb.js}"></script>
 
 </body>
+
+
+
 </html>
