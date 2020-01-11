@@ -252,7 +252,8 @@ public class ImageService {
         // Récupération de l'image sur le disque local
         String pathh=System.getProperty("user.dir") + "/src/main/resources/static/images/" + id + ".jpg";
         imgObj.getDataInFile(pathh);
-        return pathh;
+        System.out.println(this.getDescription(imgObj));
+        return "../images/" + id + ".jpg";
 
     }
 

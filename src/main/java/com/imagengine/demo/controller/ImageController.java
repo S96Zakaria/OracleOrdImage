@@ -14,15 +14,19 @@ import org.springframework.ui.Model;
 
 
 @Controller
-@RequestMapping("/images")
 public class ImageController {
 
     ImageService imageService = new ImageService();
 
 
     @GetMapping("/")
-    public String insert() {
+    public String index() {
         return "index";
+    }
+
+    @GetMapping("/getImage/")
+    public String affiche() {
+        return "affiche";
     }
 
     @PostMapping("/")
@@ -32,18 +36,20 @@ public class ImageController {
         return "index";
     }
 
-    @GetMapping("/getImage/{id}")
-    public String getImage(Model model, @PathVariable("id") int id) throws IOException, SQLException {
+    @PostMapping("/getImage/")
+    public String getImage(Model model, @RequestParam("id") int id) throws IOException, SQLException {
         OrdImage ordImage = imageService.getImage(id);
-        return imageService.stockImageLocaly(id, ordImage);
+        String link=imageService.stockImageLocaly(id, ordImage);
+        model.addAttribute("link",link);
+        return "affiche";
     }
 
     @PostMapping("/compareImages/")
-    public int compareImages(Model model, @RequestPart("file1") MultipartFile multipartFile1
+    public float compareImages(Model model, @RequestPart("file1") MultipartFile multipartFile1
             , @RequestPart("file2") MultipartFile multipartFile2
             , @RequestParam int color
             , @RequestParam int texture
-            , @RequestParam int shape) {
+            , @RequestParam int shape) throws SQLException {
         return imageService.compareImages(multipartFile1, multipartFile2, color, texture, shape);
 
     }
