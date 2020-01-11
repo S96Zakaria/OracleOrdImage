@@ -8,45 +8,46 @@
     <link rel="stylesheet" type="text/css" href="../static/css/style.min.css" th:href="@{/css/style.css}" />
 </head>
 <body>
-
+<nav class="navbar navbar-expand-lg navbar-dark indigo">
+    <a class="navbar-brand" href="#">Navbar w/ text</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Features</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Pricing</a>
+            </li>
+        </ul>
+        <span class="navbar-text white-text">
+      Navbar text with an inline element
+    </span>
+    </div>
+</nav>
 <div class="container">
     <div class="row">
-        <form >
-            <input type="file" name="file" >
-            <input type="submit" name="name"/>
-        </form>
         <form class="md-form" action="/images/"  method="post" enctype="multipart/form-data">
-            <div class="file-field">
-                <div class="btn btn-primary btn-sm float-left">
-                    <span>Parcourir Image...</span>
-                    <input type="file"  name="file" >
-                </div>
-                <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text" placeholder="Upload your file" disabled>
-                </div>
-            </div>
-                 <button type="submit" class="btn purple-gradient">Purple</button>
-        </form>
-
-        <form class="md-form">
-            <div class="file-field">
-                <a class="btn-floating peach-gradient mt-0 float-left">
-                    <i class="fas fa-paperclip" aria-hidden="true"></i>
-                    <input type="file">
-                </a>
-                <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text" placeholder="Upload your file">
-                </div>
+            <div class="custom-file">
+                <input type="file" name="file" class="custom-file-input" id="customFileLang" lang="fr">
+                <label class="custom-file-label" for="customFileLang">Sélectionner le fichier </label>
             </div>
         </form>
     </div>
 </div>
 
-<script src="../static/js/bootstrap.js" th:href="@{/js/bootstrap.js}"></script>
-<script src="../static/js/jquery.js" th:href="@{/js/jquery.js}"></script>
-<script src="../static/js/popper.js" th:href="@{/js/popper.js}"></script>
-<script src="../static/js/mdb.js" th:href="@{/js/mdb.js}"></script>
-
+ <script th:src="@{../js/jquery.min.js}"></script>
+ <script th:src="@{../js/popper.min.js}"></script>
+ <script th:src="@{../js/bootstrap.min.js}"></script>
+ <script th:src="@{../js/mdb.min.js}"></script>
 </body>
 
 
