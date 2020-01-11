@@ -1,13 +1,15 @@
 package com.imagengine.demo.service;
 
 
-import	oracle.ord.im.OrdImage; // Pour la classe OrdImage
-import	oracle.ord.im.OrdImageSignature; // Pour la classe OrdImageSignature
+import oracle.ord.im.OrdImage; // Pour la classe OrdImage
+import oracle.ord.im.OrdImageSignature; // Pour la classe OrdImageSignature
+
 import java.io.File;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import oracle.sql.NUMBER;
@@ -17,9 +19,8 @@ import org.springframework.stereotype.Repository;
 public class ImageService {
     private OrdImageSignature sign;
 
-    public void insertNewImage()
-    {
-        String sql ="INSERT INTO IMAGE (id) values(image_seq.NEXTVAL)";
+    public void insertNewImage() {
+        String sql = "INSERT INTO IMAGE (id) values(image_seq.NEXTVAL)";
         PreparedStatement stmt = null;
         try {
             // Connect.getConnection().setAutoCommit(true);
@@ -32,11 +33,11 @@ public class ImageService {
             System.out.println("Insertion Failed");
         }
     }
-    public int getLastId()
-    {
+
+    public int getLastId() {
         OracleResultSet rset;
-int x=0;
-        String sql ="SELECT MAX(id) from Image";
+        int x = 0;
+        String sql = "SELECT MAX(id) from Image";
         PreparedStatement stmt = null;
         try {
             stmt = Connect.getConnection().prepareStatement(sql);
@@ -45,20 +46,22 @@ int x=0;
             if (rset.next()) // RÃ©cupÃ©ration du descripteur d'OrdImage
             {
                 System.out.println("RÃ©cupÃ©ration Max ID");
-                x =  rset.getInt(1);
+                x = rset.getInt(1);
             }
             Connect.getConnection().commit();
 
             stmt.close();
-            System.out.println("id howa "+x);
+            System.out.println("id howa " + x);
 
         } catch (SQLException ex) {
             System.out.println("RÃ©cupÃ©ration Max ID Failleeed");
         }
         return x;
     }
-    public ImageService(){
+
+    public ImageService() {
     }
+
     public void initImage(BigDecimal id) {
         // Ecriture de la requÃªte SQL
         String sql = "UPDATE image SET image=ORDSYS.ORDImage.init(), signature=ORDSYS.ORDImageSignature.init() WHERE id=?";
@@ -77,7 +80,7 @@ int x=0;
         }
     }
 
-    public OrdImage setProperties(BigDecimal id,File file) {
+    public OrdImage setProperties(BigDecimal id, File file) {
 
         PreparedStatement stmt = null;
         // Ecriture de la requÃªte SQL
@@ -109,8 +112,8 @@ int x=0;
             imgObj.loadDataFromByteArray(fileContent);
             // GÃ©nÃ©ration des mÃ©tas donnÃ©es (propriÃ©tÃ©s de l'image)
             imgObj.setProperties();
-            if(imgObj.checkProperties())
-            {   sign.generateSignature(imgObj);
+            if (imgObj.checkProperties()) {
+                sign.generateSignature(imgObj);
                 return imgObj;
             }
         } catch (Exception e) {
@@ -119,7 +122,7 @@ int x=0;
         return imgObj;
     }
 
-    public void updateAndInsertImage(BigDecimal id,File file) {
+    public void updateAndInsertImage(BigDecimal id, File file) {
 
         initImage(id);
         try {
@@ -152,12 +155,15 @@ int x=0;
             System.out.println("updateAndInsertImage FAILED");
         }
     }
-    public void createImage(File file){
+
+    public void createImage(File file) {
 
         this.insertNewImage();
-        int x=this.getLastId();
-        this.updateAndInsertImage(BigDecimal.valueOf(x),file);
+        int x = this.getLastId();
+        this.updateAndInsertImage(BigDecimal.valueOf(x), file);
 
     }
-}
+
+
+    }
 
