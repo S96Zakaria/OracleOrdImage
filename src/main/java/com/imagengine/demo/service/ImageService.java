@@ -1,14 +1,9 @@
-package com.imagengine.demo.services;
+package com.imagengine.demo.service;
 
 
-import java.sql.*; // Pour la connexion avec Oracle
-import	java.io.*; // Pour les entrée sorties
-import	oracle.jdbc.*; // Pour les pilotes Oracle
-import	oracle.sql.*; // Pour les spécificités SQL d'Oracle
 import	oracle.ord.im.OrdImage; // Pour la classe OrdImage
 import	oracle.ord.im.OrdImageSignature; // Pour la classe OrdImageSignature
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.sql.PreparedStatement;
@@ -92,7 +87,7 @@ public class ImageService {
             // VÃ©rification de la gÃ©nÃ©ration des propriÃ©tÃ©s
             if (imgObj.checkProperties()) {
                 // Ecriture de la requÃªte SQL pour mettre Ã  jour l'attribut
-                String sql = "UPDATE imageTest SET image=? signature=? WHERE id=?";
+                String sql = "UPDATE imageTest SET image=? , signature=? WHERE id=?";
                 // CrÃ©ation d'une instance de l'objet OraclePreparedStatement
                 OraclePreparedStatement pstmt = (OraclePreparedStatement) Connect.getConnection().prepareStatement(sql);
                 // Ajout de l'instance d'OrdImage dans la requÃªte
@@ -110,6 +105,8 @@ public class ImageService {
                 System.out.println("Done updateAndInsertImage");
             }
         } catch (Exception ex) {
+            System.out.println(ex);
+
             System.out.println("updateAndInsertImage FAILED");
         }
     }

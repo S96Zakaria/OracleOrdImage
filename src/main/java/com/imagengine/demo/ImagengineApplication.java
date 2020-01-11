@@ -1,7 +1,6 @@
 package com.imagengine.demo;
 
-import com.imagengine.demo.services.ImageService;
-import org.springframework.boot.CommandLineRunner;
+import com.imagengine.demo.service.ImageService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -15,7 +14,7 @@ public class ImagengineApplication  {
         SpringApplication.run(ImagengineApplication.class, args);
         ImageService imageService = new ImageService();
         File file = new File(System.getProperty("user.dir")+"/src/main/resources/static/images/image.jpg");
-        imageService.updateAndInsertImage(BigDecimal.valueOf(1),file);
+        imageService.updateAndInsertImage(BigDecimal.valueOf(3),file);
         //System.out.println("hjkgskjsh");
     }
 
