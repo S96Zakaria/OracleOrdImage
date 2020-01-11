@@ -5,10 +5,12 @@ import oracle.ord.im.OrdImage; // Pour la classe OrdImage
 import oracle.ord.im.OrdImageSignature; // Pour la classe OrdImageSignature
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
@@ -157,13 +159,55 @@ public class ImageService {
     }
 
     public void createImage(File file) {
-
         this.insertNewImage();
         int x = this.getLastId();
         this.updateAndInsertImage(BigDecimal.valueOf(x), file);
+        getSignature(x);
 
     }
 
+    public void getImage(int id) {
+
+
+        try {
+            Statement stmt = Connect.getConnection().createStatement();
+
+            // Ecriture de la requete SQL pour récupérer l'attribut de type ORDImage
+            String sql = "SELECT image FROM image e WHERE e.id="+BigDecimal.valueOf(id)+" FOR UPDATE";
+            // Execution de la requête et récupération du résultat
+            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sql);
+
+            // déclaration d'une instance de l'objet OrdImage
+            OrdImage imgObj = null;
+
+            // S'il y a un résultat
+            if (rset.next()) {
+            // Récupération du descripteur
+                imgObj = (OrdImage) rset.getORAData(1, OrdImage.getORADataFactory());
+                // Récupération de l'image sur le disque local
+                imgObj.getDataInFile(System.getProperty("user.dir")+"/src/main/resources/static/images/"+id+".jpg");
+                if(imgObj.checkProperties()) {
+                    System.out.println(
+                            "Source : " 	+ 			imgObj.getSource() +
+                                    "Type mime : " +			imgObj.getMimeType() +
+                                    "Format de fichier : " + 		imgObj.getFormat() +
+                                    "Hauteur : "+ 			imgObj.getHeight() +
+                                    "Largeur : "+ 			imgObj.getWidth() +
+                                    "Poid en bytes : "+ 		imgObj.getContentLength() +
+                                    "Type : "+ 				imgObj.getContentFormat() +
+                                    "Compression : "+ 			imgObj.getCompressionFormat() ) ;
+                }
+            }
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
 
     }
+    public void getSignature(int id)
+    {
+
+    }
+}
+
+
 
