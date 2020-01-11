@@ -15,11 +15,51 @@ import oracle.jdbc.OracleResultSet;
 public class ImageService {
     private OrdImageSignature sign;
 
+    public void insertNewImage()
+    {
+        String sql ="INSERT INTO IMAGE (id) values(image_seq.NEXTVAL)";
+        PreparedStatement stmt = null;
+        try {
+            // Connect.getConnection().setAutoCommit(true);
+            stmt = Connect.getConnection().prepareStatement(sql);
+            stmt.executeQuery();
+            Connect.getConnection().commit();
+            stmt.close();
+            System.out.println("Insetion done  ");
+        } catch (SQLException ex) {
+            System.out.println("Insertion Failed");
+        }
+    }
+    public void getLastId()
+    {
+        OracleResultSet rset;
+
+        String sql ="SELECT MAX(id) from Image";
+        PreparedStatement stmt = null;
+        try {
+            stmt = Connect.getConnection().prepareStatement(sql);
+
+            rset = (OracleResultSet) stmt.executeQuery();
+            if (rset.next()) // RÃ©cupÃ©ration du descripteur d'OrdImage
+            {
+                System.out.println("RÃ©cupÃ©ration Max ID");
+              // BigDecimal x = (BigDecimal) rset.getORAData(1);
+                sign = (OrdImageSignature) rset.getORAData(2, OrdImageSignature.getORADataFactory());
+            }
+            stmt.close();
+            Connect.getConnection().commit();
+
+            stmt.close();
+      //      System.out.println("MAX ID IS   "+);
+        } catch (SQLException ex) {
+            System.out.println("Insertion Failed");
+        }
+    }
     public ImageService(){
     }
     public void initImage(BigDecimal id) {
         // Ecriture de la requÃªte SQL
-        String sql = "UPDATE imageTest SET image=ORDSYS.ORDImage.init(), signature=ORDSYS.ORDImageSignature.init() WHERE id=?";
+        String sql = "UPDATE image SET image=ORDSYS.ORDImage.init(), signature=ORDSYS.ORDImageSignature.init() WHERE id=?";
 
         PreparedStatement stmt = null;
         try {
@@ -39,7 +79,7 @@ public class ImageService {
 
         PreparedStatement stmt = null;
         // Ecriture de la requÃªte SQL
-        String sql = "SELECT image, signature FROM imageTest WHERE id=? FOR UPDATE";
+        String sql = "SELECT image, signature FROM image WHERE id=? FOR UPDATE";
 
         // Execution de la requÃªte et rÃ©cupÃ©ration du rÃ©sultat
         OracleResultSet rset;
@@ -87,7 +127,7 @@ public class ImageService {
             // VÃ©rification de la gÃ©nÃ©ration des propriÃ©tÃ©s
             if (imgObj.checkProperties()) {
                 // Ecriture de la requÃªte SQL pour mettre Ã  jour l'attribut
-                String sql = "UPDATE imageTest SET image=? , signature=? WHERE id=?";
+                String sql = "UPDATE image SET image=? , signature=? WHERE id=?";
                 // CrÃ©ation d'une instance de l'objet OraclePreparedStatement
                 OraclePreparedStatement pstmt = (OraclePreparedStatement) Connect.getConnection().prepareStatement(sql);
                 // Ajout de l'instance d'OrdImage dans la requÃªte
