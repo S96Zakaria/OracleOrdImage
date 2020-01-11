@@ -43,6 +43,11 @@ public class ImageController {
         return "index";
     }
 
+    @GetMapping("/{id}")
+    public String getImage(Model model,@PathVariable("id") int id)
+    {
+return "a";
+    }
 
 
 }

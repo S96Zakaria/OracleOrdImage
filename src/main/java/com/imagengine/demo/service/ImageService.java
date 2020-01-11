@@ -173,7 +173,7 @@ public class ImageService {
             Statement stmt = Connect.getConnection().createStatement();
 
             // Ecriture de la requete SQL pour récupérer l'attribut de type ORDImage
-            String sql = "SELECT image FROM image e WHERE e.id="+BigDecimal.valueOf(id)+" FOR UPDATE";
+            String sql = "SELECT image FROM image e WHERE e.id=" + BigDecimal.valueOf(id) + " FOR UPDATE";
             // Execution de la requête et récupération du résultat
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sql);
 
@@ -182,20 +182,20 @@ public class ImageService {
 
             // S'il y a un résultat
             if (rset.next()) {
-            // Récupération du descripteur
+                // Récupération du descripteur
                 imgObj = (OrdImage) rset.getORAData(1, OrdImage.getORADataFactory());
                 // Récupération de l'image sur le disque local
-                imgObj.getDataInFile(System.getProperty("user.dir")+"/src/main/resources/static/images/"+id+".jpg");
-                if(imgObj.checkProperties()) {
+                imgObj.getDataInFile(System.getProperty("user.dir") + "/src/main/resources/static/images/" + id + ".jpg");
+                if (imgObj.checkProperties()) {
                     System.out.println(
-                            "Source : " 	+ 			imgObj.getSource() +
-                                    "Type mime : " +			imgObj.getMimeType() +
-                                    "Format de fichier : " + 		imgObj.getFormat() +
-                                    "Hauteur : "+ 			imgObj.getHeight() +
-                                    "Largeur : "+ 			imgObj.getWidth() +
-                                    "Poid en bytes : "+ 		imgObj.getContentLength() +
-                                    "Type : "+ 				imgObj.getContentFormat() +
-                                    "Compression : "+ 			imgObj.getCompressionFormat() ) ;
+                            "Source : " + imgObj.getSource() +
+                                    "Type mime : " + imgObj.getMimeType() +
+                                    "Format de fichier : " + imgObj.getFormat() +
+                                    "Hauteur : " + imgObj.getHeight() +
+                                    "Largeur : " + imgObj.getWidth() +
+                                    "Poid en bytes : " + imgObj.getContentLength() +
+                                    "Type : " + imgObj.getContentFormat() +
+                                    "Compression : " + imgObj.getCompressionFormat());
                 }
             }
         } catch (SQLException | IOException e) {
@@ -203,11 +203,26 @@ public class ImageService {
         }
 
     }
-    public void getSignature(int id)
-    {
+
+    public void getSignature(int id) {
+/*
+// Ecriture de la requête SQL
+        String sql3 = "SELECT signature FROM maTable WHERE id=1 FOR UPDATE";
+
+// Exécution de la requête et récupération du résultat
+        OracleResultSet rset2 = (OracleResultSet) stmt.executeQuery(sql3);
+
+// Déclaration d'une instance de l'objet OrdImageSignature
+        OrdImageSignature imgSig = null;
+
+// S'il y a un résultat
+        if (rset2.next()) {
+// Récupération du descripteur
+            imgSig = (OrdImageSignature) rset2.getORAData(1, OrdImageSignature.getORADataFactory());
+        }
+      return  imgSig.generateSignature(imgObj);
+    */
 
     }
 }
-
-
 
