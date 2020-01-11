@@ -10,8 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
+import oracle.sql.NUMBER;
+import org.springframework.stereotype.Repository;
 
-
+@Repository
 public class ImageService {
     private OrdImageSignature sign;
 
@@ -30,10 +32,10 @@ public class ImageService {
             System.out.println("Insertion Failed");
         }
     }
-    public void getLastId()
+    public int getLastId()
     {
         OracleResultSet rset;
-
+int x=0;
         String sql ="SELECT MAX(id) from Image";
         PreparedStatement stmt = null;
         try {
@@ -43,17 +45,17 @@ public class ImageService {
             if (rset.next()) // RÃ©cupÃ©ration du descripteur d'OrdImage
             {
                 System.out.println("RÃ©cupÃ©ration Max ID");
-              // BigDecimal x = (BigDecimal) rset.getORAData(1);
-                sign = (OrdImageSignature) rset.getORAData(2, OrdImageSignature.getORADataFactory());
+                x =  rset.getInt(1);
             }
-            stmt.close();
             Connect.getConnection().commit();
 
             stmt.close();
-      //      System.out.println("MAX ID IS   "+);
+            System.out.println("id howa "+x);
+
         } catch (SQLException ex) {
-            System.out.println("Insertion Failed");
+            System.out.println("RÃ©cupÃ©ration Max ID Failleeed");
         }
+        return x;
     }
     public ImageService(){
     }
@@ -149,6 +151,13 @@ public class ImageService {
 
             System.out.println("updateAndInsertImage FAILED");
         }
+    }
+    public void createImage(File file){
+
+        this.insertNewImage();
+        int x=this.getLastId();
+        this.updateAndInsertImage(BigDecimal.valueOf(x),file);
+
     }
 }
 
