@@ -1,52 +1,57 @@
 package com.imagengine.demo.controller;
 
 import com.imagengine.demo.service.ImageService;
+import oracle.ord.im.OrdImage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 
 import org.springframework.ui.Model;
 
 
 @Controller
-@RequestMapping("/images")
 public class ImageController {
-    public String fileLocation = System.getProperty("user.dir") + "/src/main/resources/static/images/";
 
     ImageService imageService = new ImageService();
 
 
     @GetMapping("/")
-    public String insert() {
+    public String index() {
         return "index";
+    }
+
+    @GetMapping("/getImage/")
+    public String affiche() {
+        return "affiche";
     }
 
     @PostMapping("/")
     public String addImage(Model model, @RequestPart("file") MultipartFile multipartFile) {
 
-        String filename = multipartFile.getOriginalFilename();
-        System.out.println(filename);
-        File file = new File(fileLocation + filename);
-        boolean bool = false;
-        try {
-            multipartFile.transferTo(file);
-            imageService.createImage(file);
-            bool = file.delete();
-            System.out.println("tmèaat ??" + bool);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-
-        }
+        imageService.createFileFromMyltiPart(multipartFile);
         return "index";
     }
 
-    @GetMapping("/{id}")
-    public String getImage(Model model,@PathVariable("id") int id)
-    {
-return "a";
+    @PostMapping("/getImage/")
+    public String getImage(Model model, @RequestParam("id") int id) throws IOException, SQLException {
+        OrdImage ordImage = imageService.getImage(id);
+        String link=imageService.stockImageLocaly(id, ordImage);
+        model.addAttribute("link",link);
+        return "affiche";
+    }
+
+    @PostMapping("/compareImages/")
+    public float compareImages(Model model, @RequestPart("file1") MultipartFile multipartFile1
+            , @RequestPart("file2") MultipartFile multipartFile2
+            , @RequestParam int color
+            , @RequestParam int texture
+            , @RequestParam int shape) throws SQLException {
+        return imageService.compareImages(multipartFile1, multipartFile2, color, texture, shape);
+
     }
 
 

@@ -15,6 +15,7 @@ import java.sql.Statement;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 @Repository
 public class ImageService {
@@ -157,17 +158,17 @@ public class ImageService {
         }
     }
 
-    public void createImage(File file) {
+    public int createImage(File file) {
         this.insertNewImage();
         int x = this.getLastId();
         this.updateAndInsertImage(BigDecimal.valueOf(x), file);
-        getSignature(x);
+        return x;
 
     }
 
-    public void getImage(int id) {
+    public OrdImage getImage(int id) {
 
-
+        OrdImage imgObj = null;
         try {
             Statement stmt = Connect.getConnection().createStatement();
 
@@ -177,51 +178,138 @@ public class ImageService {
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sql);
 
             // déclaration d'une instance de l'objet OrdImage
-            OrdImage imgObj = null;
+
 
             // S'il y a un résultat
             if (rset.next()) {
                 // Récupération du descripteur
                 imgObj = (OrdImage) rset.getORAData(1, OrdImage.getORADataFactory());
-                // Récupération de l'image sur le disque local
-                imgObj.getDataInFile(System.getProperty("user.dir") + "/src/main/resources/static/images/" + id + ".jpg");
-                if (imgObj.checkProperties()) {
-                    System.out.println(
-                            "Source : " + imgObj.getSource() +
-                                    "Type mime : " + imgObj.getMimeType() +
-                                    "Format de fichier : " + imgObj.getFormat() +
-                                    "Hauteur : " + imgObj.getHeight() +
-                                    "Largeur : " + imgObj.getWidth() +
-                                    "Poid en bytes : " + imgObj.getContentLength() +
-                                    "Type : " + imgObj.getContentFormat() +
-                                    "Compression : " + imgObj.getCompressionFormat());
-                }
+
+
             }
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+        return imgObj;
 
     }
 
-    public void getSignature(int id) {
-/*
-// Ecriture de la requête SQL
-        String sql3 = "SELECT signature FROM maTable WHERE id=1 FOR UPDATE";
-
-// Exécution de la requête et récupération du résultat
-        OracleResultSet rset2 = (OracleResultSet) stmt.executeQuery(sql3);
-
-// Déclaration d'une instance de l'objet OrdImageSignature
+    public OrdImageSignature getSignature(int id, OrdImage imgObj) {
         OrdImageSignature imgSig = null;
 
-// S'il y a un résultat
-        if (rset2.next()) {
-// Récupération du descripteur
-            imgSig = (OrdImageSignature) rset2.getORAData(1, OrdImageSignature.getORADataFactory());
-        }
-      return  imgSig.generateSignature(imgObj);
-    */
+        try {
 
+            Statement stmt = Connect.getConnection().createStatement();
+
+            // Ecriture de la requête SQL
+            String sql3 = "SELECT signature FROM image WHERE id=" + BigDecimal.valueOf(id) + " FOR UPDATE";
+
+            // Exécution de la requête et récupération du résultat
+            OracleResultSet rset2 = (OracleResultSet) stmt.executeQuery(sql3);
+
+            // Déclaration d'une instance de l'objet OrdImageSignature
+
+
+            // S'il y a un résultat
+            if (rset2.next()) {
+                // Récupération du descripteur
+                imgSig = (OrdImageSignature) rset2.getORAData(1, OrdImageSignature.getORADataFactory());
+                imgSig.generateSignature(imgObj);
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return imgSig;
+
+
+    }
+
+    public String getDescription(OrdImage imgObj) {
+        String result = "";
+
+        try {
+            if (imgObj.checkProperties()) {
+                result =
+                        "Source : " + imgObj.getSource() +
+                                "Type mime : " + imgObj.getMimeType() +
+                                "Format de fichier : " + imgObj.getFormat() +
+                                "Hauteur : " + imgObj.getHeight() +
+                                "Largeur : " + imgObj.getWidth() +
+                                "Poid en bytes : " + imgObj.getContentLength() +
+                                "Type : " + imgObj.getContentFormat() +
+                                "Compression : " + imgObj.getCompressionFormat();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public String stockImageLocaly(int id, OrdImage imgObj) throws IOException, SQLException {
+        // Récupération de l'image sur le disque local
+        String pathh=System.getProperty("user.dir") + "/src/main/resources/static/images/" + id + ".jpg";
+        imgObj.getDataInFile(pathh);
+        System.out.println(this.getDescription(imgObj));
+        return "../images/" + id + ".jpg";
+
+    }
+
+    public float compareImages(MultipartFile fileOne, MultipartFile fileTwo, int color, int texture, int shape) throws SQLException {
+        int file1 = createFileFromMyltiPart(fileOne);
+        int file2 = createFileFromMyltiPart(fileTwo);
+        OrdImage image1 = getImage(file1);
+        OrdImage image2 = getImage(file2);
+        OrdImageSignature signature1 = getSignature(file1, image1);
+        OrdImageSignature signature2 = getSignature(file2, image2);
+        String commande = "color=" + color + " texture=" + texture + " shape=" + shape;
+        // Comparaison par évaluation du score
+        return  OrdImageSignature.evaluateScore(signature1, signature2, commande);
+
+
+
+    }
+
+    public float similarityRate(OrdImageSignature signature1, OrdImageSignature signature2, int color, int texture, int shape,float seuil) {
+
+        int similaire = Integer.MIN_VALUE;
+        try {
+            // Ecriture de la commande définissant les coef. des critères de // comparaisons
+            String commande = "color=" + color + " texture=" + texture + " shape=" + shape;
+            // Comparaison par évaluation du score
+            float f = OrdImageSignature.evaluateScore(signature1, signature2, commande);
+            //  Définission du seuil
+
+            // Comparaison par la méthode isSimilar()
+
+            similaire = OrdImageSignature.isSimilar(signature1, signature2, commande, seuil);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return similaire;
+    }
+
+    public int createFileFromMyltiPart(MultipartFile multipartFile) {
+        int x=Integer.MIN_VALUE;
+         String fileLocation = System.getProperty("user.dir") + "/src/main/resources/static/images/";
+
+        String filename = multipartFile.getOriginalFilename();
+        System.out.println(filename);
+        File file = new File(fileLocation + filename);
+        boolean bool = false;
+        try {
+            multipartFile.transferTo(file);
+           x= this.createImage(file);
+            bool = file.delete();
+            System.out.println("tmèaat ??" + bool);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+
+        }
+        return x;
     }
 }
 
