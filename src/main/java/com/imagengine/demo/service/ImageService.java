@@ -187,6 +187,8 @@ public class ImageService {
 
 
             }
+            stmt.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -217,7 +219,7 @@ public class ImageService {
                 imgSig.generateSignature(imgObj);
 
             }
-
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
