@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark indigo">
+    <a class="navbar-brand" href="/">IRISI IMAGES</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Ajouter</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/affiche/">Afficher</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/compare/">Comparer</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/similar/">Similarité</a>
+            </li>
+        </ul>
+    </div>
+</nav>

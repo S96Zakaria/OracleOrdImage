@@ -34,6 +34,12 @@ public class ImageController {
         return "compare";
     }
 
+
+    @GetMapping("/similar/")
+    public String similarImages() {
+        return "similar";
+    }
+
     @PostMapping("/")
     public String addImage(Model model, @RequestPart("file") MultipartFile multipartFile) {
 
