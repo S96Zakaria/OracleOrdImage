@@ -252,7 +252,7 @@ public class ImageService {
 
     public int stockImageLocaly(int id, OrdImage imgObj) throws IOException, SQLException {
         // Récupération de l'image sur le disque local
-        String pathh = System.getProperty("user.dir") + "/src/main/resources/static/images/" + id + ".jpg";
+        String pathh = System.getProperty("user.dir") + "/uploadingDir/" + id + ".jpg";
         imgObj.getDataInFile(pathh);
         System.out.println(this.getDescription(imgObj));
         return id;
