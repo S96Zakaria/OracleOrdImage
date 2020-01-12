@@ -14,6 +14,7 @@ public class Image {
     private  OrdImageSignature signature;
     private  float score;
     
+    
 
     public BigDecimal getId() {
 		return id;

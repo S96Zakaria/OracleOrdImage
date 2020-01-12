@@ -1,5 +1,6 @@
 package com.imagengine.demo.controller;
 
+import com.imagengine.demo.bean.Compare;
 import com.imagengine.demo.bean.Image;
 import com.imagengine.demo.service.ImageService;
 import oracle.ord.im.OrdImage;
@@ -46,14 +47,14 @@ public class ImageController {
     @PostMapping("/")
     public String addImage(Model model, @RequestPart("file") MultipartFile multipartFile) {
 
-        imageService.createFileFromMultiPart(multipartFile);
+       model.addAttribute("id",imageService.createFileFromMultiPart(multipartFile)) ;
         return "index";
     }
 
     @PostMapping("/affiche/")
     public String getImage(Model model, @RequestParam("id") int id) throws IOException, SQLException {
         OrdImage ordImage = imageService.getImage(id);
-        Image image=new Image();
+     Image image=new Image();
      image.setImage(ordImage);
      image.setId(BigDecimal.valueOf(id));
      imageService.stockImageLocaly(image);
@@ -66,9 +67,13 @@ public class ImageController {
             , @RequestPart("file2") MultipartFile multipartFile2
             , @RequestParam float color
             , @RequestParam float texture
-            , @RequestParam float shape) throws SQLException {
+            , @RequestParam float shape) throws SQLException, IOException {
+    	Compare compare=new Compare();
+    	compare=imageService.compareImages(multipartFile1, multipartFile2, color, texture, shape);
+        model.addAttribute("id1",compare.getId1());
+        model.addAttribute("id2",compare.getId2());
+        model.addAttribute("score",compare.getScore());
 
-        model.addAttribute("seuil",imageService.compareImages(multipartFile1, multipartFile2, color, texture, shape));
         return "compare";
     }
     

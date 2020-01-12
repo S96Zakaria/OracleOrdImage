@@ -28,6 +28,7 @@
             <div class="custom-file">
                 <input type="file" name="file1" class="custom-file-input" id="customFileLang1" lang="fr">
                 <label class="custom-file-label" for="customFileLang1">Sélectionner le fichier 1</label>
+                
             </div>
             <div class="custom-file">
                 <input type="file" name="file2" class="custom-file-input" id="customFileLang2" lang="fr">
@@ -36,9 +37,17 @@
             <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">Afficher</button>
 
         </form>
-        <div th:text="${seuil}"></div>
-        <img th:src="${link}"  src="${link}" alt="" style="width: 50%" class="img-fluid">
+        <div th:text="${score}"></div>
+<!--         <img th:src="${link}"  src="${link}" alt="" style="width: 50%" class="img-fluid"> -->
     </div>
+    <div class="row">
+    <div class="col-sm-6">
+        <img th:src="@{'/uploadingDir/'+${id1}+'.jpg'}"   alt="" style="width: 50%" class="img-fluid">
+    </div><div class="col-sm-6">
+        <img th:src="@{'/uploadingDir/'+${id2}+'.jpg'}"   alt="" style="width: 50%" class="img-fluid">
+    </div>
+    </div>
+ 	
 </div>
 
 <script th:src="@{../js/jquery.min.js}"></script>

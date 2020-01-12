@@ -1,6 +1,7 @@
 package com.imagengine.demo.service;
 
 
+import com.imagengine.demo.bean.Compare;
 import com.imagengine.demo.bean.Image;
 import oracle.ord.im.OrdImage; // Pour la classe OrdImage
 import oracle.ord.im.OrdImageSignature; // Pour la classe OrdImageSignature
@@ -228,21 +229,40 @@ public class ImageService {
         System.out.println(this.getDescription(image.getImage()));
     }
 
-    public float compareImages(MultipartFile fileOne, MultipartFile fileTwo, float color, float texture, float shape) throws SQLException {
-        int id_1 = createFileFromMultiPart(fileOne);
+    public Compare compareImages(MultipartFile fileOne, MultipartFile fileTwo, float color, float texture, float shape) throws SQLException, IOException {
+        Image image1=new Image();
+        Image image2=new Image();
+
+    	int id_1 = createFileFromMultiPart(fileOne);
         int id_2 = createFileFromMultiPart(fileTwo);
-        OrdImage image1 = getImage(id_1);
-        OrdImage image2 = getImage(id_2);
+
+        OrdImage o_imag1 = getImage(id_1);
+        OrdImage o_imag2 = getImage(id_2);
         OrdImageSignature signature1 = getSignature(id_1);
         OrdImageSignature signature2 = getSignature(id_2);
+        image1.setId(BigDecimal.valueOf(id_1));
+        image2.setId(BigDecimal.valueOf(id_2));
+        image1.setImage(o_imag1);
+        image2.setImage(o_imag2); 
+        System.out.println(image1);
+        System.out.println(image2);
+
+        this.stockImageLocaly(image1);
+        this.stockImageLocaly(image2);
+       
+       Compare compare=new Compare();
+       compare.setId1(image1.getId());
+       compare.setId2(image2.getId());
+
         String commande = "color=" + color + " texture=" + texture + " shape=" + shape;
         // Comparaison par évaluation du score
         float score = 100 - OrdImageSignature.evaluateScore(signature1, signature2, commande);
+        compare.setScore(score);
         System.out.println(commande);
         System.out.println(score);
         this.deleteImage(id_1);
         this.deleteImage(id_2);
-        return score;
+        return compare;
     }
 
     public List<Image> similarityRate(int id, float color, float texture, float shape, float seuil) throws IOException {
