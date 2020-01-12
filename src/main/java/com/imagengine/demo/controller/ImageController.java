@@ -24,9 +24,14 @@ public class ImageController {
         return "index";
     }
 
-    @GetMapping("/getImage/")
+    @GetMapping("/affiche/")
     public String affiche() {
         return "affiche";
+    }
+
+    @GetMapping("/compare/")
+    public String compareImages() {
+        return "compare";
     }
 
     @PostMapping("/")
@@ -36,7 +41,7 @@ public class ImageController {
         return "index";
     }
 
-    @PostMapping("/getImage/")
+    @PostMapping("/affiche/")
     public String getImage(Model model, @RequestParam("id") int id) throws IOException, SQLException {
         OrdImage ordImage = imageService.getImage(id);
         int link=imageService.stockImageLocaly(id, ordImage);
@@ -44,14 +49,15 @@ public class ImageController {
         return "affiche";
     }
 
-    @PostMapping("/compareImages/")
-    public float compareImages(Model model, @RequestPart("file1") MultipartFile multipartFile1
+    @PostMapping("/compare/")
+    public String compareImages(Model model, @RequestPart("file1") MultipartFile multipartFile1
             , @RequestPart("file2") MultipartFile multipartFile2
-            , @RequestParam int color
-            , @RequestParam int texture
-            , @RequestParam int shape) throws SQLException {
-        return imageService.compareImages(multipartFile1, multipartFile2, color, texture, shape);
+            , @RequestParam float color
+            , @RequestParam float texture
+            , @RequestParam float shape) throws SQLException {
 
+        model.addAttribute("seuil",imageService.compareImages(multipartFile1, multipartFile2, color, texture, shape));
+        return "compare";
     }
 
 
