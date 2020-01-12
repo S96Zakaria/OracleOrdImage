@@ -1,5 +1,6 @@
 package com.imagengine.demo.controller;
 
+import com.imagengine.demo.bean.Image;
 import com.imagengine.demo.service.ImageService;
 import oracle.ord.im.OrdImage;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 
 import org.springframework.ui.Model;
@@ -50,8 +52,11 @@ public class ImageController {
     @PostMapping("/affiche/")
     public String getImage(Model model, @RequestParam("id") int id) throws IOException, SQLException {
         OrdImage ordImage = imageService.getImage(id);
-        int link=imageService.stockImageLocaly(id, ordImage);
-        model.addAttribute("link",id);
+        Image image=new Image();
+     image.setImage(ordImage);
+     image.setId(BigDecimal.valueOf(id));
+     imageService.stockImageLocaly(image);
+        model.addAttribute("image",image.getId());
         return "affiche";
     }
 
@@ -64,6 +69,17 @@ public class ImageController {
 
         model.addAttribute("seuil",imageService.compareImages(multipartFile1, multipartFile2, color, texture, shape));
         return "compare";
+    }
+    
+    @PostMapping("/similar/")
+    public String similarImages(Model model, @RequestPart("file1") MultipartFile multipartFile1
+            , @RequestParam float color
+            , @RequestParam float texture
+            , @RequestParam float shape
+            , @RequestParam float seuil) throws SQLException, IOException {
+    	
+        model.addAttribute("images",imageService.similarityRate(multipartFile1, color, texture, shape, seuil));
+        return "similar";
     }
 
 

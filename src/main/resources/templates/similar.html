@@ -20,41 +20,41 @@
                 <input type="file" name="file1" class="custom-file-input" id="customFileLang1" lang="fr">
                 <label class="custom-file-label" for="customFileLang1">Sélectionner le fichier 1</label>
             </div>
+            
+             <div class="md-form mt-3 d-inline">
+                <input type="number" step="0.1" id="materialContactFormName1" min="0" max="1" class="form-control" name="color">
+                <label for="materialContactFormName1">Couleur</label>
+            </div>
+            <div class="md-form mt-3 d-inline">
+                <input type="number" step="0.1" id="materialContactFormName2" min="0" max="1" class="form-control" name="texture">
+                <label for="materialContactFormName2">Texture</label>
+            </div>
+            <div class="md-form mt-3 d-inline">
+                <input type="number" step="0.1" id="materialContactFormName3" min="0" max="1" class="form-control" name="shape">
+                <label for="materialContactFormName3">Form</label>
+            </div>
+             <div class="md-form mt-3 d-inline">
+                <input type="number"  id="materialContactFormName3" min="0" max="100" class="form-control" name="seuil">
+                <label for="materialContactFormName3">seuil</label>
+            </div>
+            
             <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">Afficher</button>
         </form>
 <!--        <img th:src="${link}"  src="${link}" alt="" style="width: 50%" class="img-fluid">-->
     </div>
     <div class="row">
 
-        <div class="col-lg-4 col-md-12 mb-3">
+        <div class="col-lg-4 col-md-12 mb-3" th:each="image : ${images}">
 
             <div class="view overlay zoom">
-                <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/6-col/img%20(131).jpg" class="img-fluid " alt="zoom">
+                <img th:src="@{'/uploadingDir/'+${image.id}+'.jpg'}" class="img-fluid " alt="zoom">
                 <div class="mask flex-center waves-effect waves-light">
                     <p class="white-text">Zoom effect</p>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-4 col-md-12 mb-3">
-
-            <div class="view overlay zoom">
-                <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/6-col/img%20(131).jpg" class="img-fluid " alt="zoom">
-                <div class="mask flex-center waves-effect waves-light">
-                    <p class="white-text">Zoom effect</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4 col-md-12 mb-3">
-
-            <div class="view overlay zoom">
-                <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/6-col/img%20(131).jpg" class="img-fluid " alt="zoom">
-                <div class="mask flex-center waves-effect waves-light">
-                    <p class="white-text">Zoom effect</p>
-                </div>
-            </div>
-        </div>
+       
     </div>
 </div>
 
