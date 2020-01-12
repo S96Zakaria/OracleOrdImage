@@ -259,7 +259,7 @@ public class ImageService {
 
     }
 
-    public float compareImages(MultipartFile fileOne, MultipartFile fileTwo, int color, int texture, int shape) throws SQLException {
+    public float compareImages(MultipartFile fileOne, MultipartFile fileTwo, float color, float texture, float shape) throws SQLException {
         int file1 = createFileFromMyltiPart(fileOne);
         int file2 = createFileFromMyltiPart(fileTwo);
         OrdImage image1 = getImage(file1);
@@ -268,7 +268,14 @@ public class ImageService {
         OrdImageSignature signature2 = getSignature(file2, image2);
         String commande = "color=" + color + " texture=" + texture + " shape=" + shape;
         // Comparaison par évaluation du score
-        return OrdImageSignature.evaluateScore(signature1, signature2, commande);
+        float score=100-OrdImageSignature.evaluateScore(signature1, signature2, commande);
+        System.out.println(commande);
+        System.out.println(score);
+        this.deleteImage(file1);
+        this.deleteImage(file2);
+
+        return score;
+
 
 
     }
