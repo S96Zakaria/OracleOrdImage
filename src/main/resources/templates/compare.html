@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css"  th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" href="../static/css/mdb.min.css" th:href="@{/css/mdb.min.css}" />
+    <link rel="stylesheet" type="text/css" href="../static/css/style.min.css" th:href="@{/css/style.css}" />
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark indigo">
+    <a class="navbar-brand" href="#">Navbar w/ text</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Features</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Pricing</a>
+            </li>
+        </ul>
+        <span class="navbar-text white-text">
+      Navbar text with an inline element
+    </span>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <form class="md-form" action="/compare/"  method="post"  enctype="multipart/form-data">
+            <!-- Name -->
+            <div class="md-form mt-3 d-inline">
+                <input type="number" step="0.1" id="materialContactFormName1" min="0" max="1" class="form-control" name="color">
+                <label for="materialContactFormName1">Couleur</label>
+            </div>
+            <div class="md-form mt-3 d-inline">
+                <input type="number" step="0.1" id="materialContactFormName2" min="0" max="1" class="form-control" name="texture">
+                <label for="materialContactFormName2">Texture</label>
+            </div>
+            <div class="md-form mt-3 d-inline">
+                <input type="number" step="0.1" id="materialContactFormName3" min="0" max="1" class="form-control" name="shape">
+                <label for="materialContactFormName3">Form</label>
+            </div>
+            <div class="custom-file">
+                <input type="file" name="file1" class="custom-file-input" id="customFileLang1" lang="fr">
+                <label class="custom-file-label" for="customFileLang1">Sélectionner le fichier 1</label>
+            </div>
+            <div class="custom-file">
+                <input type="file" name="file2" class="custom-file-input" id="customFileLang2" lang="fr">
+                <label class="custom-file-label" for="customFileLang2">Sélectionner le fichier 2</label>
+            </div>
+            <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">Afficher</button>
+
+        </form>
+        <div th:text="${seuil}"></div>
+        <img th:src="${link}"  src="${link}" alt="" style="width: 50%" class="img-fluid">
+    </div>
+</div>
+
+<script th:src="@{../js/jquery.min.js}"></script>
+<script th:src="@{../js/popper.min.js}"></script>
+<script th:src="@{../js/bootstrap.min.js}"></script>
+<script th:src="@{../js/mdb.min.js}"></script>
+</body>
+
+
+
+</html>
