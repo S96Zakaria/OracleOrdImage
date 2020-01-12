@@ -51,7 +51,7 @@ public class ImageController {
     public String getImage(Model model, @RequestParam("id") int id) throws IOException, SQLException {
         OrdImage ordImage = imageService.getImage(id);
         int link=imageService.stockImageLocaly(id, ordImage);
-        model.addAttribute("link",link);
+        model.addAttribute("link",id);
         return "affiche";
     }
 

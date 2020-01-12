@@ -63,6 +63,7 @@
             <groupId>oracle.ord.im</groupId>
             <artifactId>OrdImg</artifactId>
             <scope>system</scope>
+            <version>1</version>
             <systemPath>${basedir}/src/main/resources/libs/ordim.jar</systemPath>
         </dependency>
 
@@ -70,6 +71,7 @@
             <groupId>oracle.jdbc</groupId>
             <artifactId>OrdImg</artifactId>
             <scope>system</scope>
+            <version>6</version>
             <systemPath>${basedir}/src/main/resources/libs/ojdbc6.jar</systemPath>
         </dependency>
     </dependencies>

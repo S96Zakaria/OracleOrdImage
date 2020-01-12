@@ -22,7 +22,7 @@ public class ImageService {
     private OrdImageSignature sign;
 
     public void insertNewImage() {
-        String sql = "INSERT INTO IMAGE (id) values(image_seq.NEXTVAL)";
+        String sql = "INSERT INTO IMAGES (id) values(image_seq.NEXTVAL)";
         PreparedStatement stmt = null;
         try {
             // Connect.getConnection().setAutoCommit(true);
@@ -39,7 +39,7 @@ public class ImageService {
     public int getLastId() {
         OracleResultSet rset;
         int x = 0;
-        String sql = "SELECT MAX(id) from Image";
+        String sql = "SELECT MAX(id) from Images";
         PreparedStatement stmt = null;
         try {
             stmt = Connect.getConnection().prepareStatement(sql);
@@ -66,7 +66,7 @@ public class ImageService {
 
     public void initImage(BigDecimal id) {
         // Ecriture de la requÃªte SQL
-        String sql = "UPDATE image SET image=ORDSYS.ORDImage.init(), signature=ORDSYS.ORDImageSignature.init() WHERE id=?";
+        String sql = "UPDATE images SET image=ORDSYS.ORDImage.init(), signature=ORDSYS.ORDImageSignature.init() WHERE id=?";
 
         PreparedStatement stmt = null;
         try {
@@ -86,7 +86,7 @@ public class ImageService {
 
         PreparedStatement stmt = null;
         // Ecriture de la requÃªte SQL
-        String sql = "SELECT image, signature FROM image WHERE id=? FOR UPDATE";
+        String sql = "SELECT image, signature FROM images WHERE id=? FOR UPDATE";
 
         // Execution de la requÃªte et rÃ©cupÃ©ration du rÃ©sultat
         OracleResultSet rset;
@@ -134,7 +134,7 @@ public class ImageService {
             // VÃ©rification de la gÃ©nÃ©ration des propriÃ©tÃ©s
             if (imgObj.checkProperties()) {
                 // Ecriture de la requÃªte SQL pour mettre Ã  jour l'attribut
-                String sql = "UPDATE image SET image=? , signature=? WHERE id=?";
+                String sql = "UPDATE images SET image=? , signature=? WHERE id=?";
                 // CrÃ©ation d'une instance de l'objet OraclePreparedStatement
                 OraclePreparedStatement pstmt = (OraclePreparedStatement) Connect.getConnection().prepareStatement(sql);
                 // Ajout de l'instance d'OrdImage dans la requÃªte
@@ -173,7 +173,7 @@ public class ImageService {
             Statement stmt = Connect.getConnection().createStatement();
 
             // Ecriture de la requete SQL pour récupérer l'attribut de type ORDImage
-            String sql = "SELECT image FROM image e WHERE e.id=" + BigDecimal.valueOf(id) + " FOR UPDATE";
+            String sql = "SELECT image FROM images e WHERE e.id=" + BigDecimal.valueOf(id) + " FOR UPDATE";
             // Execution de la requête et récupération du résultat
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sql);
 
@@ -204,7 +204,7 @@ public class ImageService {
             Statement stmt = Connect.getConnection().createStatement();
 
             // Ecriture de la requête SQL
-            String sql3 = "SELECT signature FROM image WHERE id=" + BigDecimal.valueOf(id) + " FOR UPDATE";
+            String sql3 = "SELECT signature FROM images WHERE id=" + BigDecimal.valueOf(id) + " FOR UPDATE";
 
             // Exécution de la requête et récupération du résultat
             OracleResultSet rset2 = (OracleResultSet) stmt.executeQuery(sql3);
@@ -301,7 +301,7 @@ public class ImageService {
 
     public int createFileFromMyltiPart(MultipartFile multipartFile) {
         int x = Integer.MIN_VALUE;
-        String fileLocation = System.getProperty("user.dir") + "/src/main/resources/static/images/";
+        String fileLocation = System.getProperty("user.dir") + "/uploadingDir/";
 
         String filename = multipartFile.getOriginalFilename();
         System.out.println(filename);
@@ -324,7 +324,7 @@ public class ImageService {
 
 
 
-                String sql = "DELETE FROM image  WHERE id="+BigDecimal.valueOf(id);
+                String sql = "DELETE FROM images  WHERE id="+BigDecimal.valueOf(id);
                 // CrÃ©ation d'une instance de l'objet OraclePreparedStatement
                 OraclePreparedStatement pstmt = (OraclePreparedStatement) Connect.getConnection().prepareStatement(sql);
 
