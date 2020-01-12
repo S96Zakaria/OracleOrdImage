@@ -166,7 +166,6 @@ public class ImageService {
         int x = this.getLastId();
         this.updateAndInsertImage(BigDecimal.valueOf(x), file);
         return x;
-
     }
 
     public OrdImage getImage(int id) {
@@ -174,67 +173,37 @@ public class ImageService {
         OrdImage imgObj = null;
         try {
             Statement stmt = Connect.getConnection().createStatement();
-
-            // Ecriture de la requete SQL pour récupérer l'attribut de type ORDImage
             String sql = "SELECT image FROM images e WHERE e.id=" + BigDecimal.valueOf(id) + " FOR UPDATE";
-            // Execution de la requête et récupération du résultat
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sql);
-
-            // déclaration d'une instance de l'objet OrdImage
-
-
-            // S'il y a un résultat
             if (rset.next()) {
-                // Récupération du descripteur
                 imgObj = (OrdImage) rset.getORAData(1, OrdImage.getORADataFactory());
-
-
             }
             stmt.close();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return imgObj;
-
     }
 
-    public OrdImageSignature getSignature(int id, OrdImage imgObj) {
+    public OrdImageSignature getSignature(int id) {
         OrdImageSignature imgSig = null;
-
         try {
-
             Statement stmt = Connect.getConnection().createStatement();
-
-            // Ecriture de la requête SQL
             String sql3 = "SELECT signature FROM images WHERE id=" + BigDecimal.valueOf(id) + " FOR UPDATE";
-
-            // Exécution de la requête et récupération du résultat
             OracleResultSet rset2 = (OracleResultSet) stmt.executeQuery(sql3);
-
-            // Déclaration d'une instance de l'objet OrdImageSignature
-
-
-            // S'il y a un résultat
             if (rset2.next()) {
-                // Récupération du descripteur
                 imgSig = (OrdImageSignature) rset2.getORAData(1, OrdImageSignature.getORADataFactory());
-
             }
             stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return imgSig;
-
-
     }
 
 
     public String getDescription(OrdImage imgObj) {
         String result = "";
-
         try {
             if (imgObj.checkProperties()) {
                 result =
@@ -254,120 +223,94 @@ public class ImageService {
     }
 
     public void stockImageLocaly(Image image) throws IOException, SQLException {
-        // Récupération de l'image sur le disque local
         String pathh = System.getProperty("user.dir") + "/uploadingDir/" + image.getId() + ".jpg";
-
         image.getImage().getDataInFile(pathh);
         System.out.println(this.getDescription(image.getImage()));
-
     }
 
     public float compareImages(MultipartFile fileOne, MultipartFile fileTwo, float color, float texture, float shape) throws SQLException {
-        int file1 = createFileFromMyltiPart(fileOne);
-        int file2 = createFileFromMyltiPart(fileTwo);
-        OrdImage image1 = getImage(file1);
-        OrdImage image2 = getImage(file2);
-        OrdImageSignature signature1 = getSignature(file1, image1);
-        OrdImageSignature signature2 = getSignature(file2, image2);
+        int id_1 = createFileFromMultiPart(fileOne);
+        int id_2 = createFileFromMultiPart(fileTwo);
+        OrdImage image1 = getImage(id_1);
+        OrdImage image2 = getImage(id_2);
+        OrdImageSignature signature1 = getSignature(id_1);
+        OrdImageSignature signature2 = getSignature(id_2);
         String commande = "color=" + color + " texture=" + texture + " shape=" + shape;
         // Comparaison par évaluation du score
         float score = 100 - OrdImageSignature.evaluateScore(signature1, signature2, commande);
         System.out.println(commande);
         System.out.println(score);
-        this.deleteImage(file1);
-        this.deleteImage(file2);
-
+        this.deleteImage(id_1);
+        this.deleteImage(id_2);
         return score;
-
-
     }
 
-    public List<Image> similarityRate(MultipartFile fileOne, float color, float texture, float shape, float seuil) throws IOException {
-
+    public List<Image> similarityRate(int id, float color, float texture, float shape, float seuil) throws IOException {
         String commande = "color=" + color + " texture=" + texture + " shape=" + shape;
-        int file1 = createFileFromMyltiPart(fileOne);
-        OrdImage image1 = getImage(file1);
-        OrdImageSignature signature1 = getSignature(file1, image1);
-        List<Image> images = this.getAllImages();
-        List<Image> resulList = new ArrayList<>();
+        OrdImageSignature signature1 = getSignature(id);
+        List<Image> images = this.getAllImages(id);
+        List<Image> resultList = new ArrayList<>();
         for (Image image : images) {
             try {
-                // Comparaison par la méthode isSimilar()
+                System.out.print("## IS SIMILAR "+ OrdImageSignature.isSimilar(signature1, image.getSignature(), commande, seuil));
                 if (OrdImageSignature.isSimilar(signature1, image.getSignature(), commande, seuil) == 1) {
                 	this.stockImageLocaly(image);
                     image.setScore( 100 - OrdImageSignature.evaluateScore(signature1, image.getSignature(), commande));
-                    resulList.add(image);
+                    resultList.add(image);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-
-        return resulList;
+        System.out.println("\n");
+        return resultList;
     }
 
-    public int createFileFromMyltiPart(MultipartFile multipartFile) {
+    public int createFileFromMultiPart(MultipartFile multipartFile) {
         int x = Integer.MIN_VALUE;
         String fileLocation = System.getProperty("user.dir") + "/uploadingDir/";
-
         String filename = multipartFile.getOriginalFilename();
-        System.out.println(filename);
+        System.out.println("Chosen File Name Is: "+filename);
         File file = new File(fileLocation + filename);
         boolean bool = false;
         try {
             multipartFile.transferTo(file);
             x = this.createImage(file);
             bool = file.delete();
-            System.out.println("tmèaat ??" + bool);
+            System.out.println("Image Deleted From Local?" + bool);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
-
         }
         return x;
     }
 
     public void deleteImage(int id) {
         try {
-
-
             String sql = "DELETE FROM images  WHERE id=" + BigDecimal.valueOf(id);
-            // CrÃ©ation d'une instance de l'objet OraclePreparedStatement
             OraclePreparedStatement pstmt = (OraclePreparedStatement) Connect.getConnection().prepareStatement(sql);
 
-            // Execution de la requÃªte
             pstmt.executeQuery();
-            // Connect.getConnection().setAutoCommit(true);
-            // Fermeture
+
             pstmt.close();
             Connect.getConnection().commit();
             Connect.getConnection().setAutoCommit(true);
             Connect.getConnection().close();
             System.out.println("Done Deleting");
-
         } catch (Exception ex) {
             System.out.println(ex);
-
             System.out.println(" FAILED Deleting");
         }
 
     }
 
-    public List<Image> getAllImages() {
+    public List<Image> getAllImages(int id) {
         List<Image> images = new ArrayList<>();
-        String sql = "SELECT id,image,signature FROM images";
+        String sql = "SELECT id,image,signature FROM images WHERE id<>"+id;
 
         try {
-           // Statement stmt = Connect.getConnection().createStatement();
     		OraclePreparedStatement stmt = (OraclePreparedStatement) Connect.getConnection().prepareStatement(sql);
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery();
-           
-            // déclaration d'une instance de l'objet OrdImage
-
-
-            // S'il y a un résultat
             while (rset.next()) {
-                // Récupération du image
                 Image image = new Image();
                 image.setId(BigDecimal.valueOf(rset.getInt(1)));
                 image.setImage((OrdImage) rset.getORAData(2, OrdImage.getORADataFactory()));

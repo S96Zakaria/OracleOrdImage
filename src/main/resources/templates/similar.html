@@ -12,7 +12,7 @@
 
 <div class="container">
     <div class="row align-content-center">
-        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/6-col/img%20(131).jpg" class="img-fluid " alt="zoom">
+        <img th:src="@{'/uploadingDir/'+${similarTo}+'.jpg'}"   alt="" style="width: 50%" class="img-fluid">
     </div>
     <div class="row">
         <form class="md-form" action="/similar/"  method="post"  enctype="multipart/form-data">
@@ -34,8 +34,8 @@
                 <label for="materialContactFormName3">Form</label>
             </div>
              <div class="md-form mt-3 d-inline">
-                <input type="number"  id="materialContactFormName3" min="0" max="100" class="form-control" name="seuil">
-                <label for="materialContactFormName3">seuil</label>
+                <input type="number"  id="materialContactFormName4" min="0" max="100" class="form-control" name="seuil">
+                <label for="materialContactFormName4">seuil</label>
             </div>
             
             <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">Afficher</button>
@@ -49,7 +49,7 @@
             <div class="view overlay zoom">
                 <img th:src="@{'/uploadingDir/'+${image.id}+'.jpg'}" class="img-fluid " alt="zoom">
                 <div class="mask flex-center waves-effect waves-light">
-                    <p class="white-text">Zoom effect</p>
+                    <p class="white-text" th:text="${image.score}"></p>
                 </div>
             </div>
         </div>

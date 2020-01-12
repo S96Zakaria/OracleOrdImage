@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.ui.Model;
 
@@ -45,7 +46,7 @@ public class ImageController {
     @PostMapping("/")
     public String addImage(Model model, @RequestPart("file") MultipartFile multipartFile) {
 
-        imageService.createFileFromMyltiPart(multipartFile);
+        imageService.createFileFromMultiPart(multipartFile);
         return "index";
     }
 
@@ -77,8 +78,19 @@ public class ImageController {
             , @RequestParam float texture
             , @RequestParam float shape
             , @RequestParam float seuil) throws SQLException, IOException {
-    	
-        model.addAttribute("images",imageService.similarityRate(multipartFile1, color, texture, shape, seuil));
+        int id = imageService.createFileFromMultiPart(multipartFile1);
+        OrdImage ordImage = imageService.getImage(id);
+        Image image=new Image();
+        image.setImage(ordImage);
+        image.setId(BigDecimal.valueOf(id));
+        imageService.stockImageLocaly(image);
+
+
+        List<Image> images = imageService.similarityRate(id, color, texture, shape, seuil);
+        System.out.println("IS SIMILAR RESULT FORM CONTROLLER :"+images);
+
+        model.addAttribute("images",images);
+        model.addAttribute("similarTo",image.getId());
         return "similar";
     }
 
