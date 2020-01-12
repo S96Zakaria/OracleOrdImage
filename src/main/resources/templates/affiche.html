@@ -45,8 +45,8 @@
             <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">Afficher</button>
 
         </form>
-
-        <img th:src="${link}"  src="${link}" alt="" style="width: 50%" class="img-fluid">
+            <div th:text="${link}"></div>
+        <img th:src="@{'../images/'+${link}+'.jpg'}"   alt="" style="width: 50%" class="img-fluid">
     </div>
 </div>
 

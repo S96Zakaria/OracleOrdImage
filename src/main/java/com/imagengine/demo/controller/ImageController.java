@@ -39,7 +39,7 @@ public class ImageController {
     @PostMapping("/getImage/")
     public String getImage(Model model, @RequestParam("id") int id) throws IOException, SQLException {
         OrdImage ordImage = imageService.getImage(id);
-        String link=imageService.stockImageLocaly(id, ordImage);
+        int link=imageService.stockImageLocaly(id, ordImage);
         model.addAttribute("link",link);
         return "affiche";
     }

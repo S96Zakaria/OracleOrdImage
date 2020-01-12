@@ -216,7 +216,6 @@ public class ImageService {
             if (rset2.next()) {
                 // Récupération du descripteur
                 imgSig = (OrdImageSignature) rset2.getORAData(1, OrdImageSignature.getORADataFactory());
-                imgSig.generateSignature(imgObj);
 
             }
             stmt.close();
@@ -228,6 +227,7 @@ public class ImageService {
 
 
     }
+
 
     public String getDescription(OrdImage imgObj) {
         String result = "";
@@ -250,12 +250,12 @@ public class ImageService {
         return result;
     }
 
-    public String stockImageLocaly(int id, OrdImage imgObj) throws IOException, SQLException {
+    public int stockImageLocaly(int id, OrdImage imgObj) throws IOException, SQLException {
         // Récupération de l'image sur le disque local
-        String pathh=System.getProperty("user.dir") + "/src/main/resources/static/images/" + id + ".jpg";
+        String pathh = System.getProperty("user.dir") + "/src/main/resources/static/images/" + id + ".jpg";
         imgObj.getDataInFile(pathh);
         System.out.println(this.getDescription(imgObj));
-        return "../images/" + id + ".jpg";
+        return id;
 
     }
 
@@ -268,13 +268,12 @@ public class ImageService {
         OrdImageSignature signature2 = getSignature(file2, image2);
         String commande = "color=" + color + " texture=" + texture + " shape=" + shape;
         // Comparaison par évaluation du score
-        return  OrdImageSignature.evaluateScore(signature1, signature2, commande);
-
+        return OrdImageSignature.evaluateScore(signature1, signature2, commande);
 
 
     }
 
-    public float similarityRate(OrdImageSignature signature1, OrdImageSignature signature2, int color, int texture, int shape,float seuil) {
+    public float similarityRate(OrdImageSignature signature1, OrdImageSignature signature2, int color, int texture, int shape, float seuil) {
 
         int similaire = Integer.MIN_VALUE;
         try {
@@ -294,8 +293,8 @@ public class ImageService {
     }
 
     public int createFileFromMyltiPart(MultipartFile multipartFile) {
-        int x=Integer.MIN_VALUE;
-         String fileLocation = System.getProperty("user.dir") + "/src/main/resources/static/images/";
+        int x = Integer.MIN_VALUE;
+        String fileLocation = System.getProperty("user.dir") + "/src/main/resources/static/images/";
 
         String filename = multipartFile.getOriginalFilename();
         System.out.println(filename);
@@ -303,7 +302,7 @@ public class ImageService {
         boolean bool = false;
         try {
             multipartFile.transferTo(file);
-           x= this.createImage(file);
+            x = this.createImage(file);
             bool = file.delete();
             System.out.println("tmèaat ??" + bool);
         } catch (Exception e) {
