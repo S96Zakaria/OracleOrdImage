@@ -312,5 +312,31 @@ public class ImageService {
         }
         return x;
     }
+    public void deleteImage(int id){
+        try {
+
+
+
+                String sql = "DELETE FROM image  WHERE id="+BigDecimal.valueOf(id);
+                // CrÃ©ation d'une instance de l'objet OraclePreparedStatement
+                OraclePreparedStatement pstmt = (OraclePreparedStatement) Connect.getConnection().prepareStatement(sql);
+
+                // Execution de la requÃªte
+                pstmt.executeQuery();
+                // Connect.getConnection().setAutoCommit(true);
+                // Fermeture
+                pstmt.close();
+                Connect.getConnection().commit();
+                Connect.getConnection().setAutoCommit(true);
+                Connect.getConnection().close();
+                System.out.println("Done Deleting");
+
+        } catch (Exception ex) {
+            System.out.println(ex);
+
+            System.out.println(" FAILED Deleting");
+        }
+
+    }
 }
 
