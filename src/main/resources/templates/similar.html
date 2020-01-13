@@ -2,59 +2,93 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css"  th:href="@{/css/bootstrap.min.css}" />
-    <link rel="stylesheet" type="text/css" href="../static/css/mdb.min.css" th:href="@{/css/mdb.min.css}" />
-    <link rel="stylesheet" type="text/css" href="../static/css/style.min.css" th:href="@{/css/style.css}" />
+    <title>IRISI IMAGES</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/mdb.min.css" th:href="@{/css/mdb.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/style.min.css" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<div th:replace="/navbar :: navbar"> </div>
+<div th:replace="/navbar :: navbar"></div>
+
 
 <div class="container">
-    <div class="row align-content-center">
-        <img th:src="@{'/uploadingDir/'+${similarTo}+'.jpg'}"   alt="" style="width: 50%" class="img-fluid">
+
+    <div class="row justify-content-center " th:if="${similarTo != null}">
+        <div class="view overlay zoom" style="width: 100%;">
+            <img th:src="@{'/uploadingDir/'+${similarTo}+'.jpg'}" class="img-fluid " style="width:50%;margin: auto;" alt="zoom">
+            <div class="mask flex-center waves-effect waves-light">
+            </div>
+        </div>
+        <!--        <img th:src="@{'/uploadingDir/'+${image}+'.jpg'}"   alt="" style="width: 50%" class="img-fluid">-->
     </div>
-    <div class="row">
-        <form class="md-form" action="/similar/"  method="post"  enctype="multipart/form-data">
-            <div class="custom-file">
-                <input type="file" name="file1" class="custom-file-input" id="customFileLang1" lang="fr">
-                <label class="custom-file-label" for="customFileLang1">Sélectionner le fichier 1</label>
+    <div class="row justify-content-center">
+        <form class="md-form" style="width: 70%;" action="/similar/" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="custom-file">
+                        <input type="file" name="file1" class="custom-file-input" id="customFileLang1" lang="fr">
+                        <label class="custom-file-label" for="customFileLang1">Sélectionner un fichier</label>
+                    </div>
+                </div>
             </div>
-            
-             <div class="md-form mt-3 d-inline">
-                <input type="number" step="0.1" id="materialContactFormName1" min="0" max="1" class="form-control" name="color">
-                <label for="materialContactFormName1">Couleur</label>
+            <div class="row" style="margin-top: 20px">
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <div class="md-form mt-3 d-inline">
+                        <input type="number" step="0.1" id="materialContactFormName1" min="0" max="1"
+                               class="form-control"
+                               name="color">
+                        <label for="materialContactFormName1">Couleur</label>
+                    </div>
+                </div>
+
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <div class="md-form mt-3 d-inline">
+                        <input type="number" step="0.1" id="materialContactFormName2" min="0" max="1"
+                               class="form-control"
+                               name="texture">
+                        <label for="materialContactFormName2">Texture</label>
+                    </div>
+                </div>
+
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <div class="md-form mt-3 d-inline">
+                        <input type="number" step="0.1" id="materialContactFormName3" min="0" max="1"
+                               class="form-control"
+                               name="shape">
+                        <label for="materialContactFormName3">Form</label>
+                    </div>
+                </div>
+
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <div class="md-form mt-3 d-inline">
+                        <input type="number" accept="image/jpeg" id="materialContactFormName4" min="0" max="100"
+                               class="form-control" name="seuil">
+                        <label for="materialContactFormName4">Seuil</label>
+                    </div>
+                </div>
             </div>
-            <div class="md-form mt-3 d-inline">
-                <input type="number" step="0.1" id="materialContactFormName2" min="0" max="1" class="form-control" name="texture">
-                <label for="materialContactFormName2">Texture</label>
-            </div>
-            <div class="md-form mt-3 d-inline">
-                <input type="number" step="0.1" id="materialContactFormName3" min="0" max="1" class="form-control" name="shape">
-                <label for="materialContactFormName3">Form</label>
-            </div>
-             <div class="md-form mt-3 d-inline">
-                <input type="number"  id="materialContactFormName4" min="0" max="100" class="form-control" name="seuil">
-                <label for="materialContactFormName4">seuil</label>
-            </div>
-            
-            <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">Afficher</button>
+
+
+            <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">
+                Recupire les images similair
+            </button>
         </form>
-<!--        <img th:src="${link}"  src="${link}" alt="" style="width: 50%" class="img-fluid">-->
     </div>
     <div class="row">
 
         <div class="col-lg-4 col-md-12 mb-3" th:each="image : ${images}">
 
             <div class="view overlay zoom">
-                <img th:src="@{'/uploadingDir/'+${image.id}+'.jpg'}" class="img-fluid " alt="zoom">
-                <div class="mask flex-center waves-effect waves-light">
-                    <p class="white-text" th:text="${image.score}"></p>
-                </div>
+                <figure class="figure">
+                    <img th:src="@{'/uploadingDir/'+${image.id}+'.jpg'}" class="img-fluid figure-img" alt="zoom">
+                    <figcaption class="figure-caption"><div class="d-inline">Similarité: </div> <div class="d-inline" th:text="${image.score}"></div> </figcaption>
+                </figure>
+                    <div class="mask flex-center waves-effect waves-light">
+                    </div>
             </div>
         </div>
 
-       
+
     </div>
 </div>
 
@@ -63,7 +97,6 @@
 <script th:src="@{../js/bootstrap.min.js}"></script>
 <script th:src="@{../js/mdb.min.js}"></script>
 </body>
-
 
 
 </html>

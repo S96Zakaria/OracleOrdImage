@@ -47,18 +47,19 @@ public class ImageController {
     @PostMapping("/")
     public String addImage(Model model, @RequestPart("file") MultipartFile multipartFile) {
 
-       model.addAttribute("id",imageService.createFileFromMultiPart(multipartFile)) ;
+        model.addAttribute("id", imageService.createFileFromMultiPart(multipartFile));
         return "index";
     }
 
     @PostMapping("/affiche/")
     public String getImage(Model model, @RequestParam("id") int id) throws IOException, SQLException {
         OrdImage ordImage = imageService.getImage(id);
-     Image image=new Image();
-     image.setImage(ordImage);
-     image.setId(BigDecimal.valueOf(id));
-     imageService.stockImageLocaly(image);
-        model.addAttribute("image",image.getId());
+        Image image = new Image();
+        image.setImage(ordImage);
+        image.setId(BigDecimal.valueOf(id));
+        imageService.stockImageLocaly(image);
+        model.addAttribute("image", image.getId());
+        model.addAttribute("description", imageService.getDescription(image.getImage()));
         return "affiche";
     }
 
@@ -68,15 +69,15 @@ public class ImageController {
             , @RequestParam float color
             , @RequestParam float texture
             , @RequestParam float shape) throws SQLException, IOException {
-    	Compare compare=new Compare();
-    	compare=imageService.compareImages(multipartFile1, multipartFile2, color, texture, shape);
-        model.addAttribute("id1",compare.getId1());
-        model.addAttribute("id2",compare.getId2());
-        model.addAttribute("score",compare.getScore());
+        Compare compare = new Compare();
+        compare = imageService.compareImages(multipartFile1, multipartFile2, color, texture, shape);
+        model.addAttribute("id1", compare.getId1());
+        model.addAttribute("id2", compare.getId2());
+        model.addAttribute("score", compare.getScore());
 
         return "compare";
     }
-    
+
     @PostMapping("/similar/")
     public String similarImages(Model model, @RequestPart("file1") MultipartFile multipartFile1
             , @RequestParam float color
@@ -85,17 +86,17 @@ public class ImageController {
             , @RequestParam float seuil) throws SQLException, IOException {
         int id = imageService.createFileFromMultiPart(multipartFile1);
         OrdImage ordImage = imageService.getImage(id);
-        Image image=new Image();
+        Image image = new Image();
         image.setImage(ordImage);
         image.setId(BigDecimal.valueOf(id));
         imageService.stockImageLocaly(image);
 
 
         List<Image> images = imageService.similarityRate(id, color, texture, shape, seuil);
-        System.out.println("IS SIMILAR RESULT FORM CONTROLLER :"+images);
+        System.out.println("IS SIMILAR RESULT FORM CONTROLLER :" + images);
 
-        model.addAttribute("images",images);
-        model.addAttribute("similarTo",image.getId());
+        model.addAttribute("images", images);
+        model.addAttribute("similarTo", image.getId());
         return "similar";
     }
 

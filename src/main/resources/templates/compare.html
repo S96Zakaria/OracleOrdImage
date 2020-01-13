@@ -2,52 +2,87 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css"  th:href="@{/css/bootstrap.min.css}" />
-    <link rel="stylesheet" type="text/css" href="../static/css/mdb.min.css" th:href="@{/css/mdb.min.css}" />
-    <link rel="stylesheet" type="text/css" href="../static/css/style.min.css" th:href="@{/css/style.css}" />
+    <title>IRISI IMAGES</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/mdb.min.css" th:href="@{/css/mdb.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/style.min.css" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<div th:replace="/navbar :: navbar"> </div>
+<div th:replace="/navbar :: navbar"></div>
 <div class="container">
-    <div class="row">
-        <form class="md-form" action="/compare/"  method="post"  enctype="multipart/form-data">
-            <!-- Name -->
-            <div class="md-form mt-3 d-inline">
-                <input type="number" step="0.1" id="materialContactFormName1" min="0" max="1" class="form-control" name="color">
-                <label for="materialContactFormName1">Couleur</label>
+    <div class="row justify-content-center">
+        <form class="md-form" action="/compare/" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="custom-file">
+                        <input type="file" accept="image/jpeg" name="file1" class="custom-file-input"
+                               id="customFileLang1" lang="fr">
+                        <label class="custom-file-label" for="customFileLang1">Sélectionner le fichier 1</label>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="custom-file">
+                        <input type="file" accept="image/jpeg" name="file2" class="custom-file-input"
+                               id="customFileLang2" lang="fr">
+                        <label class="custom-file-label" for="customFileLang2">Sélectionner le fichier 2</label>
+                    </div>
+                </div>
             </div>
-            <div class="md-form mt-3 d-inline">
-                <input type="number" step="0.1" id="materialContactFormName2" min="0" max="1" class="form-control" name="texture">
-                <label for="materialContactFormName2">Texture</label>
+            <div class="row">
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <div class="md-form">
+                        <input type="number" step="0.1" id="materialContactFormName1" min="0" max="1"
+                               class="form-control" name="color">
+                        <label for="materialContactFormName1">Couleur</label>
+                    </div>
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <div class="md-form">
+                        <input type="number" step="0.1" id="materialContactFormName2" min="0" max="1"
+                               class="form-control" name="texture">
+                        <label for="materialContactFormName2">Texture</label>
+                    </div>
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <div class="md-form">
+                        <input type="number" step="0.1" id="materialContactFormName3" min="0" max="1"
+                               class="form-control" name="shape">
+                        <label for="materialContactFormName3">Form</label>
+                    </div>
+                </div>
             </div>
-            <div class="md-form mt-3 d-inline">
-                <input type="number" step="0.1" id="materialContactFormName3" min="0" max="1" class="form-control" name="shape">
-                <label for="materialContactFormName3">Form</label>
-            </div>
-            <div class="custom-file">
-                <input type="file" name="file1" class="custom-file-input" id="customFileLang1" lang="fr">
-                <label class="custom-file-label" for="customFileLang1">Sélectionner le fichier 1</label>
-                
-            </div>
-            <div class="custom-file">
-                <input type="file" name="file2" class="custom-file-input" id="customFileLang2" lang="fr">
-                <label class="custom-file-label" for="customFileLang2">Sélectionner le fichier 2</label>
-            </div>
-            <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">Afficher</button>
+
+
+            <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">
+                Comparer
+            </button>
 
         </form>
-        <div th:text="${score}"></div>
-<!--         <img th:src="${link}"  src="${link}" alt="" style="width: 50%" class="img-fluid"> -->
     </div>
     <div class="row">
-    <div class="col-sm-6">
-        <img th:src="@{'/uploadingDir/'+${id1}+'.jpg'}"   alt="" style="width: 50%" class="img-fluid">
-    </div><div class="col-sm-6">
-        <img th:src="@{'/uploadingDir/'+${id2}+'.jpg'}"   alt="" style="width: 50%" class="img-fluid">
+        <div class="alert alert-success " th:if="${score != null}" style="width: 100%;" role="alert">
+            <div class="d-inline">Le resultat de comparaison des deux images est :</div>
+            <div class="d-inline" style="font-weight: bold;" th:text="${score}"></div>
+        </div>
     </div>
+
+    <div class="row" style="width: 100%;">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="view overlay zoom" style="width: 100%;">
+                <img th:src="@{'/uploadingDir/'+${id1}+'.jpg'}" class="img-fluid " style="width:80%;margin: auto;" alt="zoom">
+                <div class="mask flex-center waves-effect waves-light">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="view overlay zoom" style="width: 100%;">
+                <img th:src="@{'/uploadingDir/'+${id2}+'.jpg'}" class="img-fluid " style="width:80%;margin: auto;" alt="zoom">
+                <div class="mask flex-center waves-effect waves-light">
+                </div>
+            </div>
+        </div>
     </div>
- 	
+
 </div>
 
 <script th:src="@{../js/jquery.min.js}"></script>
@@ -55,7 +90,6 @@
 <script th:src="@{../js/bootstrap.min.js}"></script>
 <script th:src="@{../js/mdb.min.js}"></script>
 </body>
-
 
 
 </html>

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>IRISI IMAGES</title>
     <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css"  th:href="@{/css/bootstrap.min.css}" />
     <link rel="stylesheet" type="text/css" href="../static/css/mdb.min.css" th:href="@{/css/mdb.min.css}" />
     <link rel="stylesheet" type="text/css" href="../static/css/style.min.css" th:href="@{/css/style.css}" />
@@ -10,19 +10,17 @@
 <body>
 <div th:replace="/navbar :: navbar"> </div>
 <div class="container">
-    <div class="row">
+    <div class="row justify-content-center add-image">
+        <div class="alert alert-success " th:if="${id != null}" style="width: 100%;" role="alert">
+            <div class="d-inline">Image ajouter avec succes et son ID est :</div> <div class="d-inline" th:text="${id}"></div>
+        </div>
         <form class="md-form" action="/"  method="post" enctype="multipart/form-data">
             <div class="custom-file">
-                <input type="file" name="file" class="custom-file-input" id="customFileLang" lang="fr">
+                <input type="file" accept="image/jpeg" name="file" class="custom-file-input" id="customFileLang" lang="fr">
                 <label class="custom-file-label" for="customFileLang">Sélectionner le fichier </label>
             </div>
-            <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">Afficher</button>
-
+            <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">Ajouter</button>
         </form>
-    </div>
-    <div class="row">
-    <div th:text="${id}">
-            </div>
     </div>
 </div>
 

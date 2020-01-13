@@ -208,14 +208,13 @@ public class ImageService {
         try {
             if (imgObj.checkProperties()) {
                 result =
-                        "Source : " + imgObj.getSource() +
-                                "Type mime : " + imgObj.getMimeType() +
-                                "Format de fichier : " + imgObj.getFormat() +
-                                "Hauteur : " + imgObj.getHeight() +
-                                "Largeur : " + imgObj.getWidth() +
-                                "Poid en bytes : " + imgObj.getContentLength() +
-                                "Type : " + imgObj.getContentFormat() +
-                                "Compression : " + imgObj.getCompressionFormat();
+                                " Type mime : " + imgObj.getMimeType() +
+                                "\t Format de fichier : " + imgObj.getFormat() +
+                                "\t Hauteur : " + imgObj.getHeight() +
+                                "\t Largeur : " + imgObj.getWidth() +
+                                "\t Poid en bytes : " + imgObj.getContentLength() +
+                                "\t Type : " + imgObj.getContentFormat() +
+                                "\t Compression : " + imgObj.getCompressionFormat();
             }
         } catch (SQLException e) {
             e.printStackTrace();
